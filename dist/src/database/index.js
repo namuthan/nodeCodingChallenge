@@ -33,12 +33,10 @@ exports.saveMessages = function () {
     if (msgs.length < 0) return;
 
     // save message to the file 
-    console.log('Saving msgs to the json file');
     var json = JSON.stringify(msgs);
     var fs = require('fs');
     fs.writeFile('myjsonfile.json', json, 'utf8', function (err) {
         if (err) throw err;
-        console.log('complete');
     });
 };
 

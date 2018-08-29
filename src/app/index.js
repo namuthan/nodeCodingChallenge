@@ -2,12 +2,15 @@ import koa from 'koa'
 import router from './../routing'
 import bodyparser from 'koa-bodyparser'
 import logger from 'koa-morgan'
-import responseTime from 'koa-response-time'
 import database from './../database'
+import responseTime from './../middleware/responseTime'
+import errorHandler from './../middleware/errorHandler'
 
 
 const app = new koa()
-app.use(responseTime())
+
+app.use(responseTime)
+app.use(errorHandler)
 app.use(logger('combined'))
 app.use(bodyparser())
 app.use(router.routes())
@@ -21,7 +24,6 @@ exports.start = async () => {
     console.log("connected")
 }
 
-
 setInterval( () => {
     database.saveMessages()
-}, 1000);
+}, 30000);

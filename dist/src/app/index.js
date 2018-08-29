@@ -16,18 +16,24 @@ var _koaMorgan = require('koa-morgan');
 
 var _koaMorgan2 = _interopRequireDefault(_koaMorgan);
 
-var _koaResponseTime = require('koa-response-time');
-
-var _koaResponseTime2 = _interopRequireDefault(_koaResponseTime);
-
 var _database = require('./../database');
 
 var _database2 = _interopRequireDefault(_database);
 
+var _responseTime = require('./../middleware/responseTime');
+
+var _responseTime2 = _interopRequireDefault(_responseTime);
+
+var _errorHandler = require('./../middleware/errorHandler');
+
+var _errorHandler2 = _interopRequireDefault(_errorHandler);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var app = new _koa2.default();
-app.use((0, _koaResponseTime2.default)());
+
+app.use(_responseTime2.default);
+app.use(_errorHandler2.default);
 app.use((0, _koaMorgan2.default)('combined'));
 app.use((0, _koaBodyparser2.default)());
 app.use(_routing2.default.routes());
@@ -45,4 +51,4 @@ exports.start = async function () {
 
 setInterval(function () {
     _database2.default.saveMessages();
-}, 1000);
+}, 30000);

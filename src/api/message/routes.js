@@ -1,5 +1,6 @@
 import Router from 'koa-router'
 import controller from './controller'
+import messageValidator from './../../middleware/messageValidator'
 
 let routes = new Router()
 
@@ -8,7 +9,7 @@ routes.get('/', async ctx => {
     ctx.body = msgs
 })
 
-routes.post('/', async ctx => {
+routes.post('/', messageValidator, async ctx => {
     const data = ctx.request.body
     console.log(data)
     const msg = controller.create(data)
