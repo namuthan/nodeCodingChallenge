@@ -14,11 +14,6 @@ var _fs2 = _interopRequireDefault(_fs);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.connect = function () {
-    console.log('Database Connected!');
-    console.log(_configuration2.default.get("JSON_FILE_NAME"));
-};
-
 var msgs = [];
 
 exports.appendMessage = function (msg) {
@@ -30,26 +25,23 @@ exports.readMessages = function () {
 };
 
 exports.saveMessages = function () {
-    if (msgs.length < 0) return;
-
-    // save message to the file 
+    // save message to the file
     var json = JSON.stringify(msgs);
-    var fs = require('fs');
-    fs.writeFile('myjsonfile.json', json, 'utf8', function (err) {
+    _fs2.default.writeFile(_configuration2.default.get("JSON_FILE_NAME"), json, 'utf8', function (err) {
         if (err) throw err;
     });
 };
 
 exports.loadMessages = function () {
-    _fs2.default.readFile('myjsonfile.json', 'utf8', function readFileCallback(err, data) {
-        if (err) {
-            console.log(err);
-            throw err;
-        } else {
-            try {
+    return new Promise(function (resolve, reject) {
+        _fs2.default.readFile(_configuration2.default.get("JSON_FILE_NAME"), 'utf8', function readFileCallback(err, data) {
+            if (err) {
+                reject(err);
+            } else {
                 msgs = JSON.parse(data);
-            } catch (err) {}
-        }
+                resolve(msgs);
+            }
+        });
     });
 };
 

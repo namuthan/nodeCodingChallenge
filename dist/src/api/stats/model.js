@@ -9,7 +9,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var Stats = function Stats(numberOfCalls, lastMessage) {
     _classCallCheck(this, Stats);
 
-    this.numberOfCalls = from;
+    this.numberOfCalls = numberOfCalls;
     this.lastMessage = lastMessage;
 };
 

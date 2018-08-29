@@ -20,16 +20,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var routes = new _koaRouter2.default();
 
-routes.get('/', async function (ctx) {
-    var msgs = _controller2.default.read();
-    ctx.body = msgs;
-});
-
 routes.post('/', _messageValidator2.default, async function (ctx) {
     var data = ctx.request.body;
-    console.log(data);
     var msg = _controller2.default.create(data);
     ctx.body = msg;
+    ctx.status = 201;
 });
 
 exports.default = routes.routes();

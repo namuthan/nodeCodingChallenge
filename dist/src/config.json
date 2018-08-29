@@ -1,3 +1,4 @@
 {
-    "JSON_FILE_NAME": "file.json"
+    "JSON_FILE_NAME": "messages.json",
+    "PORT": 3000
 }

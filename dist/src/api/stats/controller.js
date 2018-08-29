@@ -12,8 +12,5 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.read = function () {
     var msgs = _database2.default.readMessages();
-    return {
-        "numberOfCalls": msgs.length,
-        "lastMessage": msgs[msgs.length - 1]
-    };
+    return new _model2.default(msgs.length, msgs[msgs.length - 1]);
 };

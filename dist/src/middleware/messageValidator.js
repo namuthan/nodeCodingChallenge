@@ -24,7 +24,6 @@ async function messageValidator(ctx, next) {
   }
   ctx.request.body.message = !(0, _isEmpty3.default)(ctx.request.body.message) ? ctx.request.body.message : "";
 
-  console.log(errors);
   if ((0, _isEmpty3.default)(errors)) {
     await next();
   } else {

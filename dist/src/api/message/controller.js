@@ -11,9 +11,6 @@ var _database2 = _interopRequireDefault(_database);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.create = function (body) {
-    throw new Error("new erropr");
-
-    console.log('saving message to the json file');
     var msg = new _model2.default(body);
     _database2.default.appendMessage(msg);
     return msg;

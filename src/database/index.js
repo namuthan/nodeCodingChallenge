@@ -2,12 +2,7 @@ import conf from '../configuration'
 import Stats from '../api/stats/model'
 import fs from 'fs'
 
-exports.connect = () => {
-    console.log('Database Connected!')
-    console.log(conf.get("JSON_FILE_NAME"))
-}
-
-var msgs = []
+let msgs = []
 
 exports.appendMessage = (msg) => {
     msgs.push(msg)
@@ -18,29 +13,24 @@ exports.readMessages = () => {
 }
 
 exports.saveMessages = () => {
-    if (msgs.length < 0) return 
-    
-    // save message to the file 
+    // save message to the file
     const json = JSON.stringify(msgs)
-    var fs = require('fs');
-    fs.writeFile('myjsonfile.json', json, 'utf8', (err) => {
+    fs.writeFile(conf.get("JSON_FILE_NAME"), json, 'utf8', (err) => {
         if (err) throw err;
     });
 }
 
 exports.loadMessages = () => {
-    fs.readFile('myjsonfile.json', 'utf8', function readFileCallback(err, data){
-        if (err){
-            console.log(err);
-            throw err;
-        } else {
-            try {
+    return new Promise((resolve, reject) => {
+        fs.readFile(conf.get("JSON_FILE_NAME"), 'utf8', function readFileCallback(err, data){
+            if (err){
+                reject(err)
+            } else {
                 msgs = JSON.parse(data)
-            } catch (err) {
-                
+                resolve(msgs)
             }
-        }
-    });
+        });
+    })
 }
 
 exports.getStats = () => {

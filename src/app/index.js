@@ -1,27 +1,32 @@
 import koa from 'koa'
 import router from './../routing'
 import bodyparser from 'koa-bodyparser'
-import logger from 'koa-morgan'
+import morgan from 'koa-morgan'
 import database from './../database'
-import responseTime from './../middleware/responseTime'
 import errorHandler from './../middleware/errorHandler'
+import configuration from './../configuration'
 
+const port = configuration.get("PORT")
 
 const app = new koa()
 
-app.use(responseTime)
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 app.use(errorHandler)
-app.use(logger('combined'))
 app.use(bodyparser())
 app.use(router.routes())
 app.use(ctx => { ctx.type = 'json'})
 
 exports.start = async () => {
-    console.log("Started")
-    database.connect()
     database.loadMessages()
-    app.listen(3000)
-    console.log("connected")
+        .then(msg => {
+            app.listen(port)
+            console.log(`listening on port ${port}`)
+        })
+        .catch(err => {
+            console.log(`failed to load messages ${err}`)
+            app.listen(port)
+            console.log(`listening on port ${port}`)
+        })
 }
 
 setInterval( () => {

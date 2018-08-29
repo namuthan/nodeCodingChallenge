@@ -20,21 +20,22 @@ var _database = require('./../database');
 
 var _database2 = _interopRequireDefault(_database);
 
-var _responseTime = require('./../middleware/responseTime');
-
-var _responseTime2 = _interopRequireDefault(_responseTime);
-
 var _errorHandler = require('./../middleware/errorHandler');
 
 var _errorHandler2 = _interopRequireDefault(_errorHandler);
 
+var _configuration = require('./../configuration');
+
+var _configuration2 = _interopRequireDefault(_configuration);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var port = _configuration2.default.get("PORT");
 
 var app = new _koa2.default();
 
-app.use(_responseTime2.default);
+app.use((0, _koaMorgan2.default)(':method :url :status :res[content-length] - :response-time ms'));
 app.use(_errorHandler2.default);
-app.use((0, _koaMorgan2.default)('combined'));
 app.use((0, _koaBodyparser2.default)());
 app.use(_routing2.default.routes());
 app.use(function (ctx) {
@@ -42,11 +43,14 @@ app.use(function (ctx) {
 });
 
 exports.start = async function () {
-    console.log("Started");
-    _database2.default.connect();
-    _database2.default.loadMessages();
-    app.listen(3000);
-    console.log("connected");
+    _database2.default.loadMessages().then(function (msg) {
+        app.listen(port);
+        console.log('listening on port ' + port);
+    }).catch(function (err) {
+        console.log('failed to load messages ' + err);
+        app.listen(port);
+        console.log('listening on port ' + port);
+    });
 };
 
 setInterval(function () {
